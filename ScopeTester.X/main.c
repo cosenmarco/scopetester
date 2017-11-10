@@ -30,18 +30,20 @@
 #include <xc.h>
 #include <stdint.h>
 
-//#define _XTAL_FREQ 500000      //Used by the XC8 delay_ms(x) macro
 
-#define LED_GRN PORTAbits.RA0
-#define LED_RED PORTAbits.RA1
+// OUTPUTS
+#define LED_GRN LATAbits.LATA0
+#define LED_RED LATAbits.LATA1
+#define SHUTDOWN LATCbits.LATC0
+#define OUT LATCbits.LATC5
+
+// INPUTS
 #define ERR PORTAbits.RA2
 #define SWITCH PORTAbits.RA3
-#define SHUTDOWN PORTCbits.RC0
 #define SENSE PORTCbits.C12IN1N
 #define FSEL0 PORTCbits.RC2
 #define FSEL1 PORTCbits.RC3
 #define FSEL2 PORTCbits.RC4
-#define OUT PORTCbits.RC5
 
 #define SW_PRESSED 0
 #define SW_RELEASED 1
@@ -50,13 +52,6 @@
 #define SHTDN_TURN_OFF 0
 
 #define DC_OUT_LEVEL 0
-
-/********** DEFINES **********/
-typedef struct {
-    uint8_t Pre;
-    uint16_t Period;
-    uint8_t Duty;
-} freq_t;
 
 typedef enum { 
     F_1MHz,
@@ -69,10 +64,26 @@ typedef enum {
     F_DC
 } mode_t;
 
+typedef struct {
+    unsigned prescale;
+    unsigned pr2Value;
+    unsigned ccpr1lValue;
+    unsigned dc1bValue;
+} pwm_setup_t;
+
+typedef struct {
+    unsigned prescale;
+    unsigned ccpr1hValue;
+    unsigned ccpr1lValue;
+} compare_setup_t;
+
 void turnOnGreenLed(void);
 void turnOnRedLed(void);
 unsigned readMode(void);
 void setupMode(mode_t mode);
+void setupPWM(pwm_setup_t setup);
+void setupCompare(compare_setup_t setup);
+void setupDC(void);
 
 void main(void) {
     
@@ -81,16 +92,18 @@ void main(void) {
     
     // PORT A configuration
     PORTA = 0;
+    ANSELA=0;
     TRISA = 0b111100; // Input from the TS2951 Error pin and the ON/OFF button
     WPUA = 0b001100; // Weak Pull-up enalbed on ERR and SWITCH inputs
     
     // PORT C configuration
     PORTC = 0;
+    ANSELC=0;
     TRISC = 0b011110; // We use here RC0 for SHUTDOWN and RC5 as the signal OUT
     WPUC = 0b011100; // We want to pull-up all the frequency seletion switches
 
     OPTION_REGbits.nWPUEN = 0; // Enable Weak Pull-up resistors
-    
+   
     SHUTDOWN = SHTDN_KEEP_ON; // Make sure circuit stays ON
     
     // Given how the circuit boots, it is expected that upon startup the
@@ -133,80 +146,89 @@ unsigned readMode() {
     return (unsigned) ((FSEL2 << 2) + (FSEL1 << 1) + FSEL0);
 }
 
+
+
+// Values obtained for a Fosc = 32MHz
+const pwm_setup_t pwm_setup[] = {
+    // Prescale,   PR2,      CCPR1L,  CCP1CON
+    {      0b00,     7,       0b100,     0b00  }, // F_1MHz
+    {      0b00,    79,    0b101000,     0b00  }, // F_100KHz
+    {      0b01,   199,   0b1100100,     0b00  }, // F_10KHz
+    {      0b11,   124,    0b111110,     0b10  }  // F_1KHz
+};
+
+// Values obtained for a Fosc = 32MHz
+const compare_setup_t compare_setup[] = {
+// Prescale,  CCPR1H,  CCPR1L
+    {  0b00,    0x0F,    0xA0 }, // F_100Hz: Every 4000 (0xFA0) counts
+    {  0b00,    0x9C,    0X40 }, // F_10Hz: Every 40000 (0x9C40) counts
+    {  0b11,    0XC3,    0x50 }  // F_1Hz: Every 50000 (0xC350) counts
+};
+
+/**
+ * Sets up the operating frequency which will be generated at pin OUT.
+ * The modes F_1MHz to F_1KHz use the PWM module according to the config
+ * table stored in pwm_setup.
+ * The modes F_100Hz to F_1Hz use the Compare mode to generate an interrupt
+ * at different frequencies. The ISR will always divide this frequency by
+ * 10, so this must be taken into account in the setup of Timer1 and CCPR1.
+ * Clocking Timer1 from the system clock (F OSC ) should not be used in Compare
+ * mode. This means Fosc/4 is 8MHz
+ * @param mode The chosen operating mode
+ */
 void setupMode(mode_t mode) {
-    switch(mode) {
-        // Clocking Timer1 from the system clock (F OSC ) should not be used in Compare mode.
-        case F_1MHz:
-            // Every 4 counts we need to toggle the output
-            CCPR1H = 0;
-            CCPR1L = 4;
-            break;
-            
-        case F_100KHz:
-            // Every 40 counts we need to toggle the output
-            CCPR1H = 0;
-            CCPR1L = 40;
-            break;
-            
-        case F_10KHz:
-            // Every 400 (0x190) counts we need to toggle the output
-            CCPR1H = 0x1;
-            CCPR1L = 0x90;
-            break;
-            
-        case F_1KHz:
-            // Every 4000 (0xFA0) counts we need to toggle the output
-            CCPR1H = 0xF;
-            CCPR1L = 0xA0;
-            break;
-            
-        case F_100Hz:
-            // Every 40000 (0x9C40) counts we need to toggle the output
-            CCPR1H = 0x9C;
-            CCPR1L = 0x40;
-            break;
+    setupDC(); // Reset everything and provide default
 
-        case F_10Hz:
-        case F_1Hz:
-            // Every 50000 (0xC350) counts we need to toggle the output or generate an interrupt
-            CCPR1H = 0xC3;
-            CCPR1L = 0x50;
-            break;
-    }
-    
     switch(mode) {
         case F_1MHz:
         case F_100KHz:
         case F_10KHz:
         case F_1KHz:
+            setupPWM(pwm_setup[mode]);
+            break;
+
         case F_100Hz:
-            PIE1bits.CCP1IE = 0; // Disables the CCP1 interrupt
-            T1CON = 0b01000101; // Fosc/4 (8MHz), 1:1 prescale, ON
-            CCP1CONbits.CCP1M = 0b0010; // Compare mode: toggle output on match
-            break;
-
         case F_10Hz:
-            PIE1bits.CCP1IE = 0; // Disables the CCP1 interrupt
-            T1CON = 0b01110101; // Fosc/4 (8MHz), 1:8 prescale, ON
-            CCP1CONbits.CCP1M = 0b0010; // Compare mode: toggle output on match
-            break;
-
         case F_1Hz:
-            PIE1bits.CCP1IE = 1; // Enables the CCP1 interrupt
-            PIR1bits.CCP1IF = 0; // Clear interrupt bit
-            T1CON = 0b01110101; // Fosc/4 (8MHz), 1:8 prescale, ON
-            CCP1CONbits.CCP1M = 0b1010; // Compare mode: generate software interrupt only
-            break;
-            
-        case F_DC:
-        default:
-            PIE1bits.CCP1IE = 0; // Disables the CCP1 interrupt
-            T1CONbits.T1OSCEN = 0; // Turn off Timer1
-            CCP1CONbits.CCP1M = 0; // Capture/Compare/PWM off (resets ECCP1 module)
-            OUT = DC_OUT_LEVEL; // Set OUT to the correct logic level to have a pure DC output
+            setupCompare(compare_setup[mode - F_100Hz]);
             break;
     }
+}
 
+void setupPWM(pwm_setup_t setup) {
+    // Configure Timer2 and PWM
+    T2CONbits.T2CKPS = setup.prescale;
+    PR2 = setup.pr2Value;
+    CCPR1L = setup.ccpr1lValue;
+    CCP1CONbits.DC1B = setup.dc1bValue;
+    TMR2 = 0xFF;
+
+    // Start Timer2 and PWM
+    CCP1CONbits.CCP1M = 0b1100; // PWM mode: P1A, P1C active-high; P1B, P1D active-high
+    T2CONbits.TMR2ON = 1;
+}
+
+void setupCompare(compare_setup_t setup) {
+    PIE1bits.CCP1IE = 1; // Enables the CCP1 interrupt
+    CCP1CONbits.CCP1M = 0b1010; // Compare mode: generate software interrupt only
+    T1CONbits.TMR1CS = 0b00; // Fosc/4 (8MHz)
+    T1CONbits.T1CKPS = setup.prescale;
+    CCPR1H = setup.ccpr1hValue;
+    CCPR1L = setup.ccpr1lValue;
+    T1CONbits.TMR1ON = 1; // Turn ON Timer1
+}
+
+void setupDC() {
+    CCP1CONbits.CCP1M = 0; // Capture/Compare/PWM off (resets ECCP1 module)
+    OUT = DC_OUT_LEVEL; // Set OUT to the correct logic level to have a pure DC output
+
+    // Turn OFF and reset Timer1
+    T1CONbits.TMR1ON = 0;
+    TMR1L = 0;
+    TMR1H = 0;
+
+    T2CONbits.TMR2ON = 0; // Turn off Timer2
+    PIE1bits.CCP1IE = 0; // Disables the CCP1 interrupt
 }
                
 volatile uint8_t ocState = 0;
@@ -214,6 +236,11 @@ volatile uint8_t ocState = 0;
 void interrupt isr(void) {
     if (PIR1bits.CCP1IF) {
         PIR1bits.CCP1IF = 0; // Clear interrupt bit
+        
+        // Resets the Timer1
+        TMR1H = 0;
+        TMR1L = 0;
+
         // Every 10 calls toogle the OUT pin
         if (++ocState >= 10) {
             ocState = 0;
