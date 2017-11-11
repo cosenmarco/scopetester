@@ -53,6 +53,8 @@
 
 #define DC_OUT_LEVEL 0
 
+#define BLINK_COUNT 2000000
+
 typedef enum { 
     F_1MHz,
     F_100KHz,
@@ -65,16 +67,16 @@ typedef enum {
 } mode_t;
 
 typedef struct {
-    unsigned prescale;
-    unsigned pr2Value;
-    unsigned ccpr1lValue;
-    unsigned dc1bValue;
+    unsigned char prescale;
+    unsigned char pr2Value;
+    unsigned char ccpr1lValue;
+    unsigned char dc1bValue;
 } pwm_setup_t;
 
 typedef struct {
-    unsigned prescale;
-    unsigned ccpr1hValue;
-    unsigned ccpr1lValue;
+    unsigned char prescale;
+    unsigned char ccpr1hValue;
+    unsigned char ccpr1lValue;
 } compare_setup_t;
 
 void turnOnGreenLed(void);
@@ -84,6 +86,7 @@ void setupMode(mode_t mode);
 void setupPWM(pwm_setup_t setup);
 void setupCompare(compare_setup_t setup);
 void setupDC(void);
+void checkPower(void);
 
 void main(void) {
     
@@ -106,17 +109,27 @@ void main(void) {
    
     SHUTDOWN = SHTDN_KEEP_ON; // Make sure circuit stays ON
     
+    // Setup FVR and Comparator for battery voltage sensing
+    FVRCON = 0b10000100; // Fixed Voltage Reference is enabled (1x)
+    CM1CON0 = 0b10010010; // Enable Comparator (inverted, low speed, hysteresis)
+    CM1CON1 = 0b00100001; // No INT, + on FVR, - on C12IN1-
+
+    // Setup Timer0 to blink the red led if necessary
+    OPTION_REGbits.TMR0CS = 0; // Fosc/4 (8MHz)
+    OPTION_REGbits.PSA = 0; // Prescaler ON
+    OPTION_REGbits.PS = 0b111; // Prescale at 256
+    
+    mode_t mode = F_DC;
+    mode_t oldmode = F_DC;
+    
+    setupMode(F_DC);
+
     // Given how the circuit boots, it is expected that upon startup the
     // SWITCH is pressed. Do nothing until the user releases it.
     while(SWITCH == SW_PRESSED) continue;
 
-    mode_t mode = F_DC;
-    mode_t oldmode = F_DC;
-    
-    setupMode(mode);
-    turnOnGreenLed();
-
     do {        
+        checkPower();
         mode = readMode();
         if(mode != oldmode) {
             oldmode = mode;
@@ -142,11 +155,14 @@ void turnOnRedLed(void) {
     LED_RED = 1;
 }
 
+void toggleRedLed(void) {
+    LED_GRN = 0;
+    LED_RED = ~LED_RED;
+}
+
 unsigned readMode() {
     return (unsigned) ((FSEL2 << 2) + (FSEL1 << 1) + FSEL0);
 }
-
-
 
 // Values obtained for a Fosc = 32MHz
 const pwm_setup_t pwm_setup[] = {
@@ -230,9 +246,28 @@ void setupDC() {
     T2CONbits.TMR2ON = 0; // Turn off Timer2
     PIE1bits.CCP1IE = 0; // Disables the CCP1 interrupt
 }
-               
-volatile uint8_t ocState = 0;
 
+unsigned char blinkState = 0;
+void checkPower() {
+    if (ERR) {
+        if (INTCONbits.T0IF) {
+            INTCONbits.T0IF = 0; // Clear interrupt bit
+            if (++blinkState > 50) {
+                blinkState = 0;
+                toggleRedLed();
+            }
+        }
+    } else {
+        blinkState = 0;
+        if (FVRCONbits.FVRRDY && CM1CON0bits.C1OUT) {
+            turnOnRedLed();
+        } else {
+            turnOnGreenLed();
+        }
+    }
+}
+               
+volatile unsigned char ocState = 0;
 void interrupt isr(void) {
     if (PIR1bits.CCP1IF) {
         PIR1bits.CCP1IF = 0; // Clear interrupt bit
@@ -246,6 +281,6 @@ void interrupt isr(void) {
             ocState = 0;
             OUT = ~OUT;
         }
-    }
+    }    
 }
 
