@@ -6,6 +6,8 @@
  * This is the C (Microchip XC8 compiler) source for the project discussed at 
  * http://www.eevblog.com/forum/projects/oscilloscope-tester-like-hameg-hz60/
 */
+#include <xc.h>
+#include <stdint.h>
 
 // CONFIG1
 #pragma config FOSC = HS        // Oscillator Selection (HS Oscillator, High-speed crystal/resonator connected between OSC1 and OSC2 pins)
@@ -24,12 +26,7 @@
 #pragma config PLLEN = ON       // PLL Enable (4x PLL enabled) -- Fosc will be 32MHz with our 8MHz crystal
 #pragma config STVREN = ON      // Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
 #pragma config BORV = LO        // Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
-#pragma config LVP = ON         // Low-Voltage Programming Enable (Low-voltage programming enabled)
-
-
-#include <xc.h>
-#include <stdint.h>
-
+#pragma config LVP = OFF        // Low-Voltage Programming Enable (Low-voltage programming disabled)
 
 // OUTPUTS
 #define LED_GRN LATAbits.LATA0
@@ -52,8 +49,6 @@
 #define SHTDN_TURN_OFF 0
 
 #define DC_OUT_LEVEL 0
-
-#define BLINK_COUNT 2000000
 
 typedef enum { 
     F_1MHz,
@@ -95,13 +90,13 @@ void main(void) {
     
     // PORT A configuration
     PORTA = 0;
-    ANSELA=0;
+    ANSELA = 0;
     TRISA = 0b111100; // Input from the TS2951 Error pin and the ON/OFF button
     WPUA = 0b001100; // Weak Pull-up enalbed on ERR and SWITCH inputs
     
     // PORT C configuration
     PORTC = 0;
-    ANSELC=0;
+    ANSELC = 0;
     TRISC = 0b011110; // We use here RC0 for SHUTDOWN and RC5 as the signal OUT
     WPUC = 0b011100; // We want to pull-up all the frequency seletion switches
 
@@ -111,7 +106,7 @@ void main(void) {
     
     // Setup FVR and Comparator for battery voltage sensing
     FVRCON = 0b10000100; // Fixed Voltage Reference is enabled (1x)
-    CM1CON0 = 0b10010010; // Enable Comparator (inverted, low speed, hysteresis)
+    CM1CON0 = 0b10000010; // Enable Comparator (direct, low speed, hysteresis)
     CM1CON1 = 0b00100001; // No INT, + on FVR, - on C12IN1-
 
     // Setup Timer0 to blink the red led if necessary
@@ -119,6 +114,8 @@ void main(void) {
     OPTION_REGbits.PSA = 0; // Prescaler ON
     OPTION_REGbits.PS = 0b111; // Prescale at 256
     
+    turnOnGreenLed();
+
     mode_t mode = F_DC;
     mode_t oldmode = F_DC;
     
@@ -143,6 +140,7 @@ void main(void) {
     // User released ON/OFF. Shutdown now.
     setupMode(F_DC);
     SHUTDOWN = SHTDN_TURN_OFF; // Turn off power supply
+    while(1); // Wait forever.
 }
 
 void turnOnGreenLed(void) {
@@ -249,7 +247,7 @@ void setupDC() {
 
 unsigned char blinkState = 0;
 void checkPower() {
-    if (ERR) {
+    if (!ERR) { // ERR is active LOW
         if (INTCONbits.T0IF) {
             INTCONbits.T0IF = 0; // Clear interrupt bit
             if (++blinkState > 50) {
@@ -259,7 +257,7 @@ void checkPower() {
         }
     } else {
         blinkState = 0;
-        if (FVRCONbits.FVRRDY && CM1CON0bits.C1OUT) {
+        if (FVRCONbits.FVRRDY && CM1CON0bits.C1OUT) { 
             turnOnRedLed();
         } else {
             turnOnGreenLed();
