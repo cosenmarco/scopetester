@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:ScopeTester-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,7 +30,6 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:microchip_pic16mcu
-LIBS:cosenmarco
 LIBS:74xgxx
 LIBS:ac-dc
 LIBS:actel
@@ -47,12 +47,10 @@ LIBS:elec-unifil
 LIBS:ESD_Protection
 LIBS:ftdi
 LIBS:gennum
-LIBS:graphic
 LIBS:hc11
 LIBS:ir
 LIBS:Lattice
 LIBS:leds
-LIBS:logo
 LIBS:maxim
 LIBS:mechanical
 LIBS:microchip_dspic33dsc
@@ -123,7 +121,7 @@ U 1 1 598802C2
 P 900 2650
 F 0 "BT1" H 1000 2750 50  0000 L CNN
 F 1 "4xLR6(AA)" H 1000 2650 50  0000 L CNN
-F 2 "Wire_Pads:SolderWirePad_2x_1-2mmDrill" V 900 2710 50  0001 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_1mmDrill" V 900 2710 50  0001 C CNN
 F 3 "" V 900 2710 50  0001 C CNN
 	1    900  2650
 	1    0    0    -1  
@@ -156,7 +154,7 @@ U 1 1 5988248A
 P 3100 6500
 F 0 "C2" H 3125 6600 50  0000 L CNN
 F 1 "22pF" H 3125 6400 50  0000 L CNN
-F 2 "Capacitors_THT:C_Disc_D3_P2.5" H 3138 6350 50  0001 C CNN
+F 2 "Capacitors_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 3138 6350 50  0001 C CNN
 F 3 "" H 3100 6500 50  0001 C CNN
 	1    3100 6500
 	1    0    0    -1  
@@ -167,7 +165,7 @@ U 1 1 598824D5
 P 3500 6500
 F 0 "C3" H 3525 6600 50  0000 L CNN
 F 1 "22pF" H 3525 6400 50  0000 L CNN
-F 2 "Capacitors_THT:C_Rect_L4_W2.5_P2.5" H 3538 6350 50  0001 C CNN
+F 2 "Capacitors_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 3538 6350 50  0001 C CNN
 F 3 "" H 3500 6500 50  0001 C CNN
 	1    3500 6500
 	1    0    0    -1  
@@ -184,18 +182,18 @@ F 3 "" H 3100 5750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_DPDT_x2 SW1
+L SW_DPDT_x2-RESCUE-ScopeTester SW1
 U 1 1 5988B61A
 P 1950 1000
 F 0 "SW1" H 1950 1170 50  0000 C CNN
 F 1 "BATTERY/DC" H 1950 800 50  0000 C CNN
-F 2 "Buttons_Switches_THT:SW_DPDT_Slide_mini" H 1950 1000 50  0001 C CNN
+F 2 "Buttons_Switches:SW_DPDT_Slide_mini" H 1950 1000 50  0001 C CNN
 F 3 "" H 1950 1000 50  0001 C CNN
 	1    1950 1000
 	-1   0    0    -1  
 $EndComp
 $Comp
-L SW_DPDT_x2 SW1
+L SW_DPDT_x2-RESCUE-ScopeTester SW1
 U 2 1 5988B668
 P 1950 1500
 F 0 "SW1" H 1950 1670 50  0000 C CNN
@@ -222,7 +220,7 @@ U 1 1 5989633B
 P 1350 5900
 F 0 "D1" H 1350 6125 50  0000 C CNN
 F 1 "ON/ERROR" H 1350 5650 50  0000 C CNN
-F 2 "LEDs:LED-5MM-3" H 1350 5900 50  0001 C CNN
+F 2 "LEDs:LED_D5.0mm-3" H 1350 5900 50  0001 C CNN
 F 3 "" H 1350 5900 50  0001 C CNN
 	1    1350 5900
 	0    -1   -1   0   
@@ -239,12 +237,12 @@ F 3 "" H 1350 6500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_DIP_x03 SW3
+L SW_DIP_x03-RESCUE-ScopeTester SW3
 U 1 1 59934D8D
 P 5450 6000
 F 0 "SW3" H 5450 6350 50  0000 C CNN
 F 1 "FREQ SEL" H 5450 5850 50  0000 C CNN
-F 2 "Buttons_Switches_THT:SW_DIP_x3_Slide" H 5450 6000 50  0001 C CNN
+F 2 "Buttons_Switches_THT:SW_DIP_x3_W7.62mm_Slide_LowProfile" H 5450 6000 50  0001 C CNN
 F 3 "" H 5450 6000 50  0001 C CNN
 	1    5450 6000
 	0    1    1    0   
@@ -316,7 +314,7 @@ U 1 1 5993E94E
 P 2500 4250
 F 0 "JP1" H 2500 4400 50  0000 C CNN
 F 1 "Jumper" H 2500 4170 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 2500 4250 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x01_Pitch2.54mm" H 2500 4250 50  0001 C CNN
 F 3 "" H 2500 4250 50  0001 C CNN
 	1    2500 4250
 	1    0    0    -1  
@@ -327,7 +325,7 @@ U 1 1 5993E9C4
 P 2500 4600
 F 0 "JP2" H 2500 4750 50  0000 C CNN
 F 1 "Jumper" H 2500 4520 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 2500 4600 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x01_Pitch2.54mm" H 2500 4600 50  0001 C CNN
 F 3 "" H 2500 4600 50  0001 C CNN
 	1    2500 4600
 	1    0    0    -1  
@@ -338,7 +336,7 @@ U 1 1 5993EA51
 P 2500 5000
 F 0 "JP3" H 2500 5150 50  0000 C CNN
 F 1 "Jumper" H 2500 4920 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 2500 5000 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x01_Pitch2.54mm" H 2500 5000 50  0001 C CNN
 F 3 "" H 2500 5000 50  0001 C CNN
 	1    2500 5000
 	1    0    0    -1  
@@ -349,7 +347,7 @@ U 1 1 59944DE6
 P 7950 1900
 F 0 "R15" V 7750 1850 50  0000 L CNN
 F 1 "220K" V 7850 1850 50  0000 L CNN
-F 2 "" V 7880 1900 50  0001 C CNN
+F 2 "Potentiometers:Potentiometer_Trimmer_Piher_PT-6v_Horizontal" V 7880 1900 50  0001 C CNN
 F 3 "" H 7950 1900 50  0001 C CNN
 	1    7950 1900
 	1    0    0    -1  
@@ -666,6 +664,162 @@ F 3 "" H 4450 2200 50  0001 C CNN
 	1    4450 2200
 	1    0    0    -1  
 $EndComp
+Text GLabel 1050 3700 0    60   Input ~ 0
+VDD
+$Comp
+L C C10
+U 1 1 599B7759
+P 6150 3950
+F 0 "C10" H 6175 4050 50  0000 L CNN
+F 1 "0.01µF" H 6175 3850 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6188 3800 50  0001 C CNN
+F 3 "" H 6150 3950 50  0001 C CNN
+	1    6150 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C8
+U 1 1 599B781D
+P 5850 3950
+F 0 "C8" H 5875 4050 50  0000 L CNN
+F 1 "10µF" H 5875 3850 50  0000 L CNN
+F 2 "Capacitors_THT:CP_Radial_D4.0mm_P1.50mm" H 5888 3800 50  0001 C CNN
+F 3 "" H 5850 3950 50  0001 C CNN
+	1    5850 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR05
+U 1 1 599B78D9
+P 5450 4200
+F 0 "#PWR05" H 5450 3950 50  0001 C CNN
+F 1 "GND" H 5450 4050 50  0000 C CNN
+F 2 "" H 5450 4200 50  0001 C CNN
+F 3 "" H 5450 4200 50  0001 C CNN
+	1    5450 4200
+	1    0    0    -1  
+$EndComp
+NoConn ~ 1750 1400
+NoConn ~ 1750 1600
+NoConn ~ 2150 1500
+$Comp
+L R R5
+U 1 1 599B9E4F
+P 4150 2700
+F 0 "R5" V 4230 2700 50  0000 C CNN
+F 1 "56K" V 4150 2700 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4080 2700 50  0001 C CNN
+F 3 "" H 4150 2700 50  0001 C CNN
+	1    4150 2700
+	-1   0    0    1   
+$EndComp
+Text GLabel 2350 2400 0    60   Input ~ 0
+SWITCH
+Text GLabel 2150 5000 0    60   Input ~ 0
+SWITCH
+Text GLabel 5500 4650 2    60   Input ~ 0
+SHUTDOWN
+Text GLabel 3850 1400 0    60   Input ~ 0
+SHUTDOWN
+$Comp
+L R R4
+U 1 1 599BB3BB
+P 4150 1850
+F 0 "R4" V 4230 1850 50  0000 C CNN
+F 1 "5K6" V 4150 1850 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4080 1850 50  0001 C CNN
+F 3 "" H 4150 1850 50  0001 C CNN
+	1    4150 1850
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R2
+U 1 1 599BB7FD
+P 2500 1400
+F 0 "R2" V 2580 1400 50  0000 C CNN
+F 1 "10K" V 2500 1400 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2430 1400 50  0001 C CNN
+F 3 "" H 2500 1400 50  0001 C CNN
+	1    2500 1400
+	-1   0    0    1   
+$EndComp
+$Comp
+L CP C7
+U 1 1 599BCB6B
+P 5300 1900
+F 0 "C7" H 5325 2000 50  0000 L CNN
+F 1 "3.3µF" H 5325 1800 50  0000 L CNN
+F 2 "Capacitors_THT:CP_Radial_D4.0mm_P1.50mm" H 5338 1750 50  0001 C CNN
+F 3 "" H 5300 1900 50  0001 C CNN
+	1    5300 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C5
+U 1 1 599BD3C7
+P 4900 4250
+F 0 "C5" H 4925 4350 50  0000 L CNN
+F 1 "100nF" H 4925 4150 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 4938 4100 50  0001 C CNN
+F 3 "" H 4900 4250 50  0001 C CNN
+	1    4900 4250
+	0    1    1    0   
+$EndComp
+$Comp
+L CP C4
+U 1 1 599C0178
+P 3750 2700
+F 0 "C4" H 3775 2800 50  0000 L CNN
+F 1 "0.22µF" H 3775 2600 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 3788 2550 50  0001 C CNN
+F 3 "" H 3750 2700 50  0001 C CNN
+	1    3750 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C1
+U 1 1 599C0605
+P 2500 2750
+F 0 "C1" H 2525 2850 50  0000 L CNN
+F 1 "330nF" H 2525 2650 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 2538 2600 50  0001 C CNN
+F 3 "" H 2500 2750 50  0001 C CNN
+	1    2500 2750
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C9
+U 1 1 59B194EA
+P 6000 6000
+F 0 "C9" H 6025 6100 50  0000 L CNN
+F 1 "0" H 6025 5900 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6038 5850 50  0001 C CNN
+F 3 "" H 6000 6000 50  0001 C CNN
+	1    6000 6000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C11
+U 1 1 59B195B5
+P 6250 6000
+F 0 "C11" H 6275 6100 50  0000 L CNN
+F 1 "0" H 6275 5900 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6288 5850 50  0001 C CNN
+F 3 "" H 6250 6000 50  0001 C CNN
+	1    6250 6000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C6
+U 1 1 59B19676
+P 5000 6000
+F 0 "C6" H 5025 6100 50  0000 L CNN
+F 1 "0" H 5025 5900 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 5038 5850 50  0001 C CNN
+F 3 "" H 5000 6000 50  0001 C CNN
+	1    5000 6000
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	5500 4800 5350 4800
 Wire Wire Line
@@ -890,61 +1044,10 @@ Connection ~ 5550 6750
 Wire Wire Line
 	5650 6300 5650 6750
 Connection ~ 5650 6750
-Text GLabel 1050 3700 0    60   Input ~ 0
-VDD
 Wire Wire Line
 	1050 3700 6550 3700
 Wire Wire Line
-	4450 4400 4450 3700
-Connection ~ 4450 3700
-$Comp
-L SW_Push_Dual SW2
-U 1 1 599B7248
-P 3200 2200
-F 0 "SW2" H 3250 2300 50  0000 L CNN
-F 1 "ON/OFF" H 3200 1930 50  0000 C CNN
-F 2 "" H 3200 2400 50  0001 C CNN
-F 3 "" H 3200 2400 50  0001 C CNN
-	1    3200 2200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	3300 4900 3550 4900
-$Comp
-L C C10
-U 1 1 599B7759
-P 6150 3950
-F 0 "C10" H 6175 4050 50  0000 L CNN
-F 1 "0.01µF" H 6175 3850 50  0000 L CNN
-F 2 "" H 6188 3800 50  0001 C CNN
-F 3 "" H 6150 3950 50  0001 C CNN
-	1    6150 3950
-	1    0    0    -1  
-$EndComp
-$Comp
-L CP C8
-U 1 1 599B781D
-P 5850 3950
-F 0 "C8" H 5875 4050 50  0000 L CNN
-F 1 "10µF" H 5875 3850 50  0000 L CNN
-F 2 "" H 5888 3800 50  0001 C CNN
-F 3 "" H 5850 3950 50  0001 C CNN
-	1    5850 3950
-	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR05
-U 1 1 599B78D9
-P 5450 4200
-F 0 "#PWR05" H 5450 3950 50  0001 C CNN
-F 1 "GND" H 5450 4050 50  0000 C CNN
-F 2 "" H 5450 4200 50  0001 C CNN
-F 3 "" H 5450 4200 50  0001 C CNN
-	1    5450 4200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4700 4150 6150 4150
 Wire Wire Line
 	5450 4150 5450 4200
 Connection ~ 5850 4150
@@ -954,9 +1057,6 @@ Connection ~ 5850 3700
 Wire Wire Line
 	6150 3800 6150 3700
 Connection ~ 6150 3700
-NoConn ~ 1750 1400
-NoConn ~ 1750 1600
-NoConn ~ 2150 1500
 Connection ~ 5700 800 
 Connection ~ 900  3100
 Connection ~ 5700 3100
@@ -973,72 +1073,23 @@ Connection ~ 4550 1150
 Wire Wire Line
 	4550 3100 4550 2400
 Connection ~ 4550 3100
-$Comp
-L R R5
-U 1 1 599B9E4F
-P 4150 2700
-F 0 "R5" V 4230 2700 50  0000 C CNN
-F 1 "56K" V 4150 2700 50  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 4080 2700 50  0001 C CNN
-F 3 "" H 4150 2700 50  0001 C CNN
-	1    4150 2700
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	4150 2000 4150 2550
 Wire Wire Line
 	4150 3100 4150 2850
 Connection ~ 4150 3100
-Text GLabel 2350 2400 0    60   Input ~ 0
-SWITCH
 Wire Wire Line
 	2350 2400 3000 2400
 Wire Wire Line
-	3400 2400 3500 2400
-Wire Wire Line
-	3500 2400 3500 3100
+	3500 3100 3500 2300
 Connection ~ 3500 3100
-Text GLabel 2150 5000 0    60   Input ~ 0
-SWITCH
-Text GLabel 5500 4650 2    60   Input ~ 0
-SHUTDOWN
-Text GLabel 3850 1550 0    60   Input ~ 0
-SHUTDOWN
-$Comp
-L R R4
-U 1 1 599BB3BB
-P 4150 1850
-F 0 "R4" V 4230 1850 50  0000 C CNN
-F 1 "5K6" V 4150 1850 50  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 4080 1850 50  0001 C CNN
-F 3 "" H 4150 1850 50  0001 C CNN
-	1    4150 1850
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
-	3850 1550 4150 1550
+	3850 1400 4150 1400
 Wire Wire Line
-	4150 1550 4150 1700
-$Comp
-L R R2
-U 1 1 599BB7FD
-P 2500 1400
-F 0 "R2" V 2580 1400 50  0000 C CNN
-F 1 "10K" V 2500 1400 50  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 2430 1400 50  0001 C CNN
-F 3 "" H 2500 1400 50  0001 C CNN
-	1    2500 1400
-	-1   0    0    1   
-$EndComp
+	4150 1400 4150 1700
 Wire Wire Line
 	2500 1250 2500 800 
 Connection ~ 2500 800 
-Wire Wire Line
-	2500 1550 2500 2200
-Wire Wire Line
-	2500 2200 3000 2200
-Wire Wire Line
-	3400 2200 4250 2200
 Connection ~ 4150 2200
 Wire Wire Line
 	5500 4650 5400 4650
@@ -1048,111 +1099,29 @@ Wire Wire Line
 	5400 4700 5350 4700
 Wire Wire Line
 	900  3100 7950 3100
-$Comp
-L CP C7
-U 1 1 599BCB6B
-P 5300 1900
-F 0 "C7" H 5325 2000 50  0000 L CNN
-F 1 "3.3µF" H 5325 1800 50  0000 L CNN
-F 2 "" H 5338 1750 50  0001 C CNN
-F 3 "" H 5300 1900 50  0001 C CNN
-	1    5300 1900
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5300 1750 5300 800 
 Connection ~ 5300 800 
 Wire Wire Line
 	5300 2050 5300 3100
 Connection ~ 5300 3100
-$Comp
-L C C5
-U 1 1 599BD3C7
-P 4700 3950
-F 0 "C5" H 4725 4050 50  0000 L CNN
-F 1 "100nF" H 4725 3850 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 4738 3800 50  0001 C CNN
-F 3 "" H 4700 3950 50  0001 C CNN
-	1    4700 3950
-	1    0    0    -1  
-$EndComp
 Connection ~ 5450 4150
-Wire Wire Line
-	4700 3800 4700 3700
-Connection ~ 4700 3700
 Wire Wire Line
 	6150 4150 6150 4100
 Wire Wire Line
 	5850 4150 5850 4100
 Wire Wire Line
-	4700 4150 4700 4100
-$Comp
-L CP C4
-U 1 1 599C0178
-P 3750 2700
-F 0 "C4" H 3775 2800 50  0000 L CNN
-F 1 "1µF" H 3775 2600 50  0000 L CNN
-F 2 "" H 3788 2550 50  0001 C CNN
-F 3 "" H 3750 2700 50  0001 C CNN
-	1    3750 2700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	3750 2850 3750 3100
 Connection ~ 3750 3100
 Wire Wire Line
-	3750 2550 3750 2200
+	3750 1650 3750 2550
 Connection ~ 3750 2200
-$Comp
-L C C1
-U 1 1 599C0605
-P 2500 2750
-F 0 "C1" H 2525 2850 50  0000 L CNN
-F 1 "330nF" H 2525 2650 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 2538 2600 50  0001 C CNN
-F 3 "" H 2500 2750 50  0001 C CNN
-	1    2500 2750
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	2500 2900 2500 3100
 Connection ~ 2500 3100
 Wire Wire Line
 	2500 2400 2500 2600
 Connection ~ 2500 2400
-$Comp
-L C C9
-U 1 1 59B194EA
-P 6000 6000
-F 0 "C9" H 6025 6100 50  0000 L CNN
-F 1 "0" H 6025 5900 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6038 5850 50  0001 C CNN
-F 3 "" H 6000 6000 50  0001 C CNN
-	1    6000 6000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C11
-U 1 1 59B195B5
-P 6250 6000
-F 0 "C11" H 6275 6100 50  0000 L CNN
-F 1 "0" H 6275 5900 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6288 5850 50  0001 C CNN
-F 3 "" H 6250 6000 50  0001 C CNN
-	1    6250 6000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C6
-U 1 1 59B19676
-P 5000 6000
-F 0 "C6" H 5025 6100 50  0000 L CNN
-F 1 "0" H 5025 5900 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 5038 5850 50  0001 C CNN
-F 3 "" H 5000 6000 50  0001 C CNN
-	1    5000 6000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5000 5850 5000 5650
 Wire Wire Line
@@ -1177,4 +1146,89 @@ Connection ~ 5650 5550
 Wire Wire Line
 	6250 6150 6250 6750
 Connection ~ 6250 6750
+$Comp
+L SW_DPDT_x2-RESCUE-ScopeTester SW2
+U 1 1 5A3DD0C1
+P 2950 1650
+F 0 "SW2" H 2950 1820 50  0000 C CNN
+F 1 "ON/OFF" H 2950 1450 50  0000 C CNN
+F 2 "Buttons_Switches:DPDT_Button_mini" H 2950 1650 50  0001 C CNN
+F 3 "" H 2950 1650 50  0001 C CNN
+	1    2950 1650
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 2300 3400 2300
+Wire Wire Line
+	3750 2200 4250 2200
+Wire Wire Line
+	3750 1650 3150 1650
+Wire Wire Line
+	2750 1750 2500 1750
+Wire Wire Line
+	2500 1750 2500 1550
+$Comp
+L SW_DPDT_x2-RESCUE-ScopeTester SW2
+U 2 1 5A3E16B9
+P 3200 2300
+F 0 "SW2" H 3200 2470 50  0000 C CNN
+F 1 "ON/OFF" H 3200 2100 50  0000 C CNN
+F 2 "Buttons_Switches:SW_DPDT_Slide_mini" H 3200 2300 50  0001 C CNN
+F 3 "" H 3200 2300 50  0001 C CNN
+	2    3200 2300
+	-1   0    0    -1  
+$EndComp
+$Comp
+L TEST TP1
+U 1 1 5A6380EA
+P 2600 5600
+F 0 "TP1" H 2600 5900 50  0000 C BNN
+F 1 "GND" H 2600 5850 50  0000 C CNN
+F 2 "Connectors:1pin" H 2600 5600 50  0001 C CNN
+F 3 "" H 2600 5600 50  0001 C CNN
+	1    2600 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 5600 2600 6750
+Connection ~ 2600 6750
+$Comp
+L Jumper JP4
+U 1 1 5A638654
+P 4450 4050
+F 0 "JP4" H 4450 4200 50  0000 C CNN
+F 1 "Jumper" H 4450 3970 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x01_Pitch2.54mm" H 4450 4050 50  0001 C CNN
+F 3 "" H 4450 4050 50  0001 C CNN
+	1    4450 4050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4450 4350 4450 4400
+Wire Wire Line
+	4450 3750 4450 3700
+Connection ~ 4450 3700
+$Comp
+L TEST TP2
+U 1 1 5A9F8AA5
+P 1550 3100
+F 0 "TP2" H 1550 3400 50  0000 C BNN
+F 1 "TEST" H 1550 3350 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_single_1mmDrill" H 1550 3100 50  0001 C CNN
+F 3 "" H 1550 3100 50  0001 C CNN
+	1    1550 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 4150 6150 4150
+Wire Wire Line
+	5050 4150 5050 4250
+Wire Wire Line
+	4750 4250 4550 4250
+Wire Wire Line
+	4550 4250 4550 4400
+Wire Wire Line
+	4550 4400 4450 4400
+Connection ~ 4450 4400
+Connection ~ 1550 3100
 $EndSCHEMATC
