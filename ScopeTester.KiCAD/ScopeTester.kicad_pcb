@@ -3,7 +3,7 @@
   (general
     (links 113)
     (no_connects 0)
-    (area 99.924999 29.924999 195.075001 85.075001)
+    (area 99.924999 29.924999 196.197 86.215)
     (thickness 1.6)
     (drawings 10)
     (tracks 257)
@@ -21,7 +21,7 @@
 
   (layers
     (0 F.Cu signal)
-    (31 B.Cu signal hide)
+    (31 B.Cu signal)
     (32 B.Adhes user hide)
     (33 F.Adhes user hide)
     (34 B.Paste user hide)
@@ -43,7 +43,7 @@
   )
 
   (setup
-    (last_trace_width 0.4)
+    (last_trace_width 0.25)
     (user_trace_width 0.3)
     (user_trace_width 0.4)
     (user_trace_width 0.5)
@@ -73,12 +73,12 @@
     (pad_size 1.524 1.524)
     (pad_drill 0.762)
     (pad_to_mask_clearance 0.2)
-    (aux_axis_origin 0 0)
-    (grid_origin 173.99 76.2)
+    (aux_axis_origin 100.33 30.48)
+    (grid_origin 100.33 30.48)
     (visible_elements FFFEFF7F)
     (pcbplotparams
-      (layerselection 0x00030_80000001)
-      (usegerberextensions false)
+      (layerselection 0x010f0_80000001)
+      (usegerberextensions true)
       (excludeedgelayer true)
       (linewidth 0.100000)
       (plotframeref false)
@@ -92,15 +92,15 @@
       (psnegative false)
       (psa4output false)
       (plotreference true)
-      (plotvalue true)
+      (plotvalue false)
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory ./GBR/))
   )
 
   (net 0 "")
